@@ -1,0 +1,33 @@
+[
+  {
+    "title": "The Science of Sleep",
+    "content": "Sleep is a naturally recurring state ...",
+    "icon": "🌙",
+    "color": "bg-indigo-500",
+    "readingTime": 2,
+    "questions": [
+      {
+        "text": "What characterizes the state of sleep?",
+        "options": [
+          "Increased muscle activity",
+          "Enhanced sensory activity",
+          "Altered consciousness",
+          "Greater interaction with surroundings"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Sleep is characterized by altered consciousness..."
+      },
+      {
+        "text": "How is sleep distinguished from wakefulness?",
+        "options": [
+          "By increased ability to react to stimuli",
+          "By decreased ability to react to stimuli",
+          "By complete lack of consciousness",
+          "By constant muscle movement"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Sleep shows decreased reactivity..."
+      }
+    ]
+  }
+]
