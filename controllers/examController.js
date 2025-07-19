@@ -1,19 +1,18 @@
-// controllers/examController.js
 import Exam from '../models/Exam.js';
 
-// Get all exams
+// Get all exams for logged-in user
 export const getExams = async (req, res) => {
   try {
-    const exams = await Exam.find();
+    const exams = await Exam.find({ owner: req.user._id });
     res.json(exams);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-// Create a new exam
+// Create a new exam with owner set
 export const createExam = async (req, res) => {
-  const exam = new Exam(req.body);
+  const exam = new Exam({ ...req.body, owner: req.user._id });
   try {
     const newExam = await exam.save();
     res.status(201).json(newExam);
@@ -22,10 +21,14 @@ export const createExam = async (req, res) => {
   }
 };
 
-// Update an exam
+// Update an exam owned by the user
 export const updateExam = async (req, res) => {
   try {
-    const exam = await Exam.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const exam = await Exam.findOneAndUpdate(
+      { _id: req.params.id, owner: req.user._id },
+      req.body,
+      { new: true }
+    );
     if (!exam) return res.status(404).json({ message: 'Exam not found' });
     res.json(exam);
   } catch (err) {
@@ -33,10 +36,10 @@ export const updateExam = async (req, res) => {
   }
 };
 
-// Delete an exam
+// Delete an exam owned by the user
 export const deleteExam = async (req, res) => {
   try {
-    const exam = await Exam.findByIdAndDelete(req.params.id);
+    const exam = await Exam.findOneAndDelete({ _id: req.params.id, owner: req.user._id });
     if (!exam) return res.status(404).json({ message: 'Exam not found' });
     res.json({ message: 'Exam deleted' });
   } catch (err) {
@@ -44,10 +47,10 @@ export const deleteExam = async (req, res) => {
   }
 };
 
-// Add a task to an exam
+// Add a task to an exam owned by the user
 export const addTask = async (req, res) => {
   try {
-    const exam = await Exam.findById(req.params.id);
+    const exam = await Exam.findOne({ _id: req.params.id, owner: req.user._id });
     if (!exam) return res.status(404).json({ message: 'Exam not found' });
 
     const newTask = req.body;
@@ -59,10 +62,10 @@ export const addTask = async (req, res) => {
   }
 };
 
-// Update a task
+// Update a task within an exam owned by the user
 export const updateTask = async (req, res) => {
   try {
-    const exam = await Exam.findById(req.params.examId);
+    const exam = await Exam.findOne({ _id: req.params.examId, owner: req.user._id });
     if (!exam) return res.status(404).json({ message: 'Exam not found' });
 
     const task = exam.tasks.id(req.params.taskId);
@@ -76,10 +79,10 @@ export const updateTask = async (req, res) => {
   }
 };
 
-// Delete a task
+// Delete a task within an exam owned by the user
 export const deleteTask = async (req, res) => {
   try {
-    const exam = await Exam.findById(req.params.examId);
+    const exam = await Exam.findOne({ _id: req.params.examId, owner: req.user._id });
     if (!exam) return res.status(404).json({ message: 'Exam not found' });
 
     exam.tasks.pull({ _id: req.params.taskId });

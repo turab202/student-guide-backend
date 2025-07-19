@@ -1,5 +1,5 @@
-// routes/examRoutes.js
 import express from 'express';
+import { protect } from '../middleware/authMiddleware.js';  // Import protect middleware
 import {
   getExams,
   createExam,
@@ -12,15 +12,15 @@ import {
 
 const router = express.Router();
 
-// CRUD for Exams
-router.get('/', getExams);
-router.post('/', createExam);
-router.put('/:id', updateExam);
-router.delete('/:id', deleteExam);
+// CRUD for Exams - all protected routes
+router.get('/', protect, getExams);
+router.post('/', protect, createExam);
+router.put('/:id', protect, updateExam);
+router.delete('/:id', protect, deleteExam);
 
-// Task routes
-router.post('/:id/tasks', addTask);
-router.put('/:examId/tasks/:taskId', updateTask);
-router.delete('/:examId/tasks/:taskId', deleteTask);
+// Task routes - all protected
+router.post('/:id/tasks', protect, addTask);
+router.put('/:examId/tasks/:taskId', protect, updateTask);
+router.delete('/:examId/tasks/:taskId', protect, deleteTask);
 
 export default router;
